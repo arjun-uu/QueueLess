@@ -1,14 +1,33 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Application.Interfaces;
+using Infrastructure.Email;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Resend;
 
-namespace Infrastructure
+namespace Infrastructure;
+
+public static class DependencyInjection
 {
-    public static class DependencyInjection
+    public static IServiceCollection AddInfrastructure(
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfigurationManager configuration)
-        {
+        services.Configure<EmailOptions>(
+            configuration.GetSection(EmailOptions.SectionName));
 
-            return services;
-        }
+        services.AddOptions();
+
+        services.AddHttpClient<ResendClient>();
+
+        services.Configure<ResendClientOptions>(options =>
+        {
+            options.ApiToken = configuration["Email:ApiKey"]!;
+        });
+
+        services.AddTransient<IResend, ResendClient>();
+
+        services.AddScoped<IEmailService, ResendEmailService>();
+
+        return services;
     }
 }
