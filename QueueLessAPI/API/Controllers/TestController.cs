@@ -1,4 +1,4 @@
-﻿
+
 using Application.Common.Exceptions;
 using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -46,3 +46,4 @@ public class TestController(
         return Ok("Test email sent successfully.");
     }
 }
+
