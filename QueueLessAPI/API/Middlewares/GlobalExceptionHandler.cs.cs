@@ -1,4 +1,5 @@
 ﻿using Application.Common.Exceptions;
+using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +27,10 @@ public sealed class GlobalExceptionHandler : IExceptionHandler
 
         var (statusCode, title) = exception switch
         {
+            ValidationException => (
+                StatusCodes.Status400BadRequest,
+                "Validation Failed"),
+
             BadRequestException => (
                 StatusCodes.Status400BadRequest,
                 "Bad Request"),
