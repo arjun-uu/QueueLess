@@ -1,9 +1,11 @@
 using API.Extensions;
+using API.Middlewares;
 using Application;
 using Infrastructure;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Host.UseSerilog((context, services, configuration) =>
     configuration
         .ReadFrom.Configuration(context.Configuration)
@@ -15,15 +17,21 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();
 
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 builder.Services.AddSwaggerServices();
 
 var app = builder.Build();
+
+app.UseExceptionHandler();
+
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 
 app.UseSwaggerServices();
 
-app.UseSerilogRequestLogging();
 app.UseAuthentication();
 app.UseAuthorization();
 
