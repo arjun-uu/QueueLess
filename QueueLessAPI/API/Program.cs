@@ -1,4 +1,4 @@
-using API.Extensions;
+using API.Configurations;
 using API.Middlewares;
 using Application;
 using Infrastructure;
