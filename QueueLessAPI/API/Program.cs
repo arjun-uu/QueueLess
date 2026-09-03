@@ -1,4 +1,5 @@
 using API.Configurations;
+using API.Configurations.Jwt;
 using API.Middlewares;
 using Application;
 using Infrastructure;
@@ -16,6 +17,7 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();
+builder.Services.AddJwtConfiguration(builder.Configuration);
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
