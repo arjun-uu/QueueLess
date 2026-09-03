@@ -1,12 +1,23 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace Application
+namespace Application;
+
+public static class DependencyInjection
 {
-    public static class DependencyInjection
+    public static IServiceCollection AddApplication(
+        this IServiceCollection services)
     {
-        public static IServiceCollection AddApplication(this IServiceCollection services)
+        services.AddMediatR(configuration =>
         {
-            return services;
-        }
+            configuration.RegisterServicesFromAssembly(
+                typeof(DependencyInjection).Assembly
+            );
+        });
+        services.AddValidatorsFromAssembly(
+          typeof(DependencyInjection).Assembly
+      );
+
+        return services;
     }
 }
